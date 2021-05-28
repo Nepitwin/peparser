@@ -155,7 +155,7 @@ namespace peparser
 	{
 		WIN32_FILE_ATTRIBUTE_DATA fileInfo;
 		ZeroMemory(&fileInfo, sizeof(fileInfo));
-		if(!GetFileAttributesEx(m_path.c_str(), GetFileExInfoStandard, (LPVOID)&fileInfo))
+		if(!GetFileAttributesExW(m_path.c_str(), GetFileExInfoStandard, (LPVOID)&fileInfo))
 		{
 			std::wcerr << L"Can't read file. " << GetLastError() << std::endl;
 			return false;
@@ -177,7 +177,7 @@ namespace peparser
 
 	bool PEParser::OpenReadOnly()
 	{
-		m_file = CreateFile(m_path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		m_file = CreateFileW(m_path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if(m_file == INVALID_HANDLE_VALUE)
 		{
@@ -217,7 +217,7 @@ namespace peparser
 
 	bool PEParser::OpenRW()
 	{
-		m_file = CreateFile(m_path.c_str(), GENERIC_READ|GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		m_file = CreateFileW(m_path.c_str(), GENERIC_READ|GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if(!m_file || m_file == INVALID_HANDLE_VALUE)
 		{
@@ -841,7 +841,7 @@ namespace peparser
 
 		result.m_differentSize = p1.FileSize() - p1.TotalIgnoredSize() != p2.FileSize() - p2.TotalIgnoredSize();
 
-		result.m_differentPath = lstrcmpi(p1.PDBPath().c_str(), p2.PDBPath().c_str()) != 0;
+		result.m_differentPath = lstrcmpiW(p1.PDBPath().c_str(), p2.PDBPath().c_str()) != 0;
 		result.m_differentPathLength = p1.PDBPath().size() != p1.PDBPath().size();
 
 		// Comparing for identical

@@ -379,7 +379,7 @@ namespace peparser
 			return;
 		}
 
-		HANDLE binaryHandle = BeginUpdateResource(binaryPath.c_str(), FALSE);
+		HANDLE binaryHandle = BeginUpdateResourceW(binaryPath.c_str(), FALSE);
 		if (!binaryHandle)
 		{
 			std::wcerr << L"File is missing, locked or has invalid format." << std::endl;
@@ -389,7 +389,7 @@ namespace peparser
 
 		for (auto lang : lang_ids)
 		{
-			if (!UpdateResource(binaryHandle, path.Type(), path.Name(), lang, NULL, 0))
+			if (!UpdateResourceW(binaryHandle, path.Type(), path.Name(), lang, NULL, 0))
 			{
 				std::wcerr << L"Failed to update resource. Error: " << GetLastError() << std::endl;
 				retcode = 1;
@@ -397,7 +397,7 @@ namespace peparser
 			}
 		}
 
-		if (!EndUpdateResource(binaryHandle, retcode != 0))
+		if (!EndUpdateResourceW(binaryHandle, retcode != 0))
 			retcode = 1;
 	}
 
@@ -503,7 +503,7 @@ namespace peparser
 
 					std::vector<std::shared_ptr<BYTE>> data;
 
-					binaryHandle = BeginUpdateResource(input.c_str(), FALSE);
+					binaryHandle = BeginUpdateResourceW(input.c_str(), FALSE);
 					if (!binaryHandle)
 					{
 						std::wcerr << L"Can't lock file for updating resources." << std::endl;

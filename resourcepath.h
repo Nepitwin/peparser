@@ -16,7 +16,7 @@ namespace peparser
 		ResourcePathElement(int name) { m_intResource = name; m_useIntResource = true; }
 		ResourcePathElement(const std::wstring& name) { m_stringResource = name; }
 
-		operator const wchar_t*() const { return m_useIntResource ? MAKEINTRESOURCE(m_intResource) : m_stringResource.data(); }
+		operator const wchar_t*() const { return m_useIntResource ? MAKEINTRESOURCEW(m_intResource) : m_stringResource.data(); }
 
 	private:
 		int m_intResource = 0;

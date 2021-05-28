@@ -169,7 +169,7 @@ namespace peparser
 	public:
 		Signer_pimpl()
 		{
-			dll = LoadLibrary(L"Mssign32.dll");
+			dll = LoadLibraryW(L"Mssign32.dll");
 
 			if (!dll)
 				return;
@@ -225,7 +225,7 @@ namespace peparser
 			if (!signerSignEx || !signerFreeSignerContext || !signerTimestampEx)
 				return false;
 
-			HANDLE file = CreateFile(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+			HANDLE file = CreateFileW(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 			if (file == INVALID_HANDLE_VALUE)
 			{
@@ -329,7 +329,7 @@ namespace peparser
 
 	void StripSignature(const std::wstring& path, int& retcode)
 	{
-		HANDLE file = CreateFile(path.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		HANDLE file = CreateFileW(path.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (file == INVALID_HANDLE_VALUE)
 		{
 			std::wcerr << "Failed to open file for writing." << std::endl;

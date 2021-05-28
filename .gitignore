@@ -8,3 +8,11 @@
 /*.opendb
 peparser.aps
 *.db
+.idea
+cmake-build-release
+cmake-build-debug
+conan.lock
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json

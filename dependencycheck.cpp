@@ -46,7 +46,7 @@ namespace peparser
 		std::wstring path;
 		path.resize(MAX_PATH);
 
-		auto size = GetModuleFileName(handle, &path[0], MAX_PATH);
+		auto size = GetModuleFileNameW(handle, &path[0], MAX_PATH);
 
 		auto err = GetLastError();
 
@@ -76,7 +76,7 @@ namespace peparser
 
 		_wputenv((L"PATH=" + parentPath.wstring() + L";" + pathEnv).c_str());
 
-		auto handle = LoadLibraryEx(name.wstring().c_str(), NULL, DONT_RESOLVE_DLL_REFERENCES);
+		auto handle = LoadLibraryExW(name.wstring().c_str(), NULL, DONT_RESOLVE_DLL_REFERENCES);
 
 		auto path = GetModuleFileName(handle);
 
@@ -92,7 +92,7 @@ namespace peparser
 		std::wstring path;
 		path.resize(MAX_PATH);
 
-		auto size = SearchPath(NULL, name.wstring().c_str(), NULL, MAX_PATH, &path[0], NULL);
+		auto size = SearchPathW(NULL, name.wstring().c_str(), NULL, MAX_PATH, &path[0], NULL);
 
 		path.resize(size);
 
@@ -274,25 +274,25 @@ namespace peparser
 		bool success = false;
 		std::wstring rawValue;
 
-		LSTATUS err = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", 0, KEY_READ, &key);
+		LSTATUS err = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", 0, KEY_READ, &key);
 		if (err == ERROR_SUCCESS)
 		{
 			DWORD size = 0;
-			err = RegQueryValueEx(key, L"Path", 0, NULL, NULL, &size);
+			err = RegQueryValueExW(key, L"Path", 0, NULL, NULL, &size);
 			if (err == ERROR_SUCCESS)
 			{
 				rawValue.resize(size / sizeof(std::wstring::value_type), L'\0');
 
-				err = RegQueryValueEx(key, L"Path", 0, NULL, (BYTE*)&rawValue[0], &size);
+				err = RegQueryValueExW(key, L"Path", 0, NULL, (BYTE*)&rawValue[0], &size);
 				if (err == ERROR_SUCCESS)
 				{
-					DWORD expandedSize = ExpandEnvironmentStrings(rawValue.c_str(), NULL, 0);
+					DWORD expandedSize = ExpandEnvironmentStringsW(rawValue.c_str(), NULL, 0);
 					if (expandedSize != 0)
 					{
 						std::wstring expandedValue;
 						expandedValue.resize(expandedSize, L'\0');
 
-						expandedSize = ExpandEnvironmentStrings(rawValue.c_str(), &expandedValue[0], expandedSize);
+						expandedSize = ExpandEnvironmentStringsW(rawValue.c_str(), &expandedValue[0], expandedSize);
 
 						if (expandedSize != 0)
 						{

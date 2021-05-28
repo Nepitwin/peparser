@@ -16,7 +16,7 @@ namespace peparser
 		ZeroMemory(&context, sizeof(ACTCTX));
 		context.cbSize = sizeof(ACTCTX);
 		context.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
-		context.lpSource = imagePath.c_str();
+		context.lpSource = (LPCSTR)(imagePath.c_str());
 
 		// 24/1 for exe, 24/2 for dlls
 		if (path.extension() == L".exe")
@@ -24,7 +24,7 @@ namespace peparser
 			context.lpResourceName = CREATEPROCESS_MANIFEST_RESOURCE_ID;
 
 			context.dwFlags = context.dwFlags | ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID | ACTCTX_FLAG_SET_PROCESS_DEFAULT;
-			context.lpAssemblyDirectory = dir.c_str();
+			context.lpAssemblyDirectory = (LPCSTR)(dir.c_str());
 		}
 		else
 			context.lpResourceName = ISOLATIONAWARE_MANIFEST_RESOURCE_ID;
