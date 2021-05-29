@@ -44,6 +44,13 @@ Install conan package manager and download all dependencies
   conan install . -s build_type=Debug
 ```
 
+## Visual Studio Profiles
+
+```
+  conan install --profile .\profile_debug .
+  conan install --profile .\profile_release .
+```
+
 Build all files by cmake cmd line or cmake gui
 
 ```
