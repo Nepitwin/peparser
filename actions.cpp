@@ -230,6 +230,49 @@ namespace peparser
 		retcode = (success) ? 0 : 1;
 	}
 
+    void Hash(const po::variables_map& variables, int& retcode)
+    {
+        retcode = 1;
+
+        std::vector<std::wstring> inputs;
+        if (variables.count("input"))
+            inputs = variables["input"].as<std::vector<std::wstring>>();
+
+        if (inputs.size() != 1)
+        {
+            std::wcerr << L"Error parsing options: must have one input file." << std::endl;
+            return;
+        }
+
+        auto out = OpenOutput<wchar_t>(variables);
+        if (!out)
+            return;
+
+        BlockList ignoredRanges = boost::lexical_cast<BlockList>(variables["r"].as<std::wstring>());
+        BlockList ignoredRanges1 = boost::lexical_cast<BlockList>(variables["r1"].as<std::wstring>());
+        BlockList ignoredRanges2 = boost::lexical_cast<BlockList>(variables["r2"].as<std::wstring>());
+
+        PEParser pe(inputs[0]);
+
+        pe.AddIgnoredRange(ignoredRanges1);
+        pe.AddIgnoredRange(ignoredRanges);
+
+        pe.Open();
+
+        auto result = PEParser::Hash(pe);
+
+        *out << result << std::endl;
+
+        bool success = false;
+
+        if (result != L"0")
+        {
+            success = true;
+        }
+
+        retcode = (success) ? 0 : 1;
+    }
+
 	void Signature(const po::variables_map& variables, int& retcode)
 	{
 		auto foo = { 1, 2, 3 };

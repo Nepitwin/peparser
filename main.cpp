@@ -64,6 +64,17 @@ int wmain(int argc, wchar_t* argv[])
 			("tlb-timestamp", po::value<bool>()->zero_tokens()->default_value(false), "Experimental workaround for TLB timestamp (tested on MIDL version 7.00.0555)")
 		;
 
+        options.push_back(po::options_description("Hash"));
+        options.back().add_options()
+            ("hash"
+                    , po::value<bool>()->zero_tokens()->notifier(std::bind(&Hash, std::ref(variables), std::ref(retcode)))
+                    , "Hash a binary file disregarding linker timestamp, "
+                      "debug info, digital signature, version info section in resources, "
+                      "__FILE__, __DATE__ and __TIME__ macros when they are used as literal strings.\n"
+                      "  Returns SHA256 if files generation is successfully otherwise 0.\n"
+            )
+        ;
+
 		options.push_back(po::options_description("Edit"));
 		options.back().add_options()
 			("delete-resource", po::wvalue<std::wstring>()->notifier(std::bind(&DeleteResource, std::ref(variables), std::ref(retcode))), "Delete resource by path.")

@@ -3,18 +3,21 @@
 
 #include "peparser.h"
 #include "widestring.h"
-#include "versionstring.h"
 
 #include "debugdirectory.h"
 
 #include <boost/io/ios_state.hpp>
 
+#include <vector>
 #include <iostream>
 #include <sstream>
-#include <iomanip>
 #include <algorithm>
-#include <wchar.h>
+#include <cwchar>
 #include <fstream>
+#include <iomanip>
+
+// OpenSSL Library
+#include <openssl/sha.h>
 
 // ================================================================================================
 
@@ -845,12 +848,14 @@ namespace peparser
 		result.m_differentPathLength = p1.PDBPath().size() != p1.PDBPath().size();
 
 		// Comparing for identical
+/*
 		if(p1.FileSize() == p2.FileSize() && 0 == memcmp(p1.m_view, p2.m_view, p1.FileSize()))
 		{
 			result.m_identical = true;
 			result.m_equivalent = true;
 			return result;
 		}
+		*/
 
 		bool firstBlockFound = false;
 		// Comparing for equivalent
@@ -1025,6 +1030,89 @@ namespace peparser
 
 		return result;
 	}
+
+    std::wstring PEParser::Hash(const PEParser &parser)
+    {
+        if(!parser.IsOpen())
+        {
+            return L"0";
+        }
+
+        if(!parser.IsValidPE()) {
+            return L"0";
+        }
+
+        std::vector<BYTE> bytes;
+        auto start = (LPBYTE)parser.m_view;
+
+        size_t index = 0;
+        size_t offset = 0;
+        size_t currentBlockSize = 0;
+
+        enum
+        {
+            NEXT_BLOCK
+            , END_BLOCK
+            , READ_BLOCK
+        };
+
+        unsigned char hash[SHA256_DIGEST_LENGTH] = { 0 };
+        SHA256_CTX ctx;
+        SHA256_Init(&ctx);
+
+        int step = NEXT_BLOCK;
+        while(true)
+        {
+            switch(step)
+            {
+                case NEXT_BLOCK:
+                {
+                    offset = parser.NextOffset(offset, currentBlockSize, parser.FileSize());
+
+                    step = READ_BLOCK;
+                    break;
+                }
+                case END_BLOCK:
+                {
+                    offset += currentBlockSize;
+
+                    SHA256_Update(&ctx, std::data(bytes), bytes.size());
+                    bytes.clear();
+
+                    step = NEXT_BLOCK;
+                    break;
+                }
+                case READ_BLOCK:
+                {
+                    if(index >= currentBlockSize)
+                    {
+                        step = END_BLOCK;
+                        break;
+                    }
+
+                    auto byte = *(LPBYTE)(start + offset + index);
+                    bytes.emplace_back(byte);
+
+                    ++index;
+                    break;
+                }
+            }
+
+            if(currentBlockSize == 0)
+                break;
+        }
+
+        SHA256_Final(hash, &ctx);
+
+        std::wostringstream os;
+        os << std::hex << std::setfill(L'0');
+
+        for (unsigned char i : hash) {
+            os << std::setw(2) << static_cast<unsigned int>(i);
+        }
+
+        return os.str();
+    }
 
 	bool PEParser::FilterDifference(CompareResult& result, const PEParser& p1, const PEParser& p2, size_t start1, size_t start2, size_t size, size_t& diffShift, bool tlbCmpExpr)
 	{

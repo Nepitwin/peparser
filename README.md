@@ -95,6 +95,20 @@ Works on files provided as input (can handle multiple files).
       --identical           Return 0 only if files are byte-for-byte identical.
       --no-heuristics       Do not try to interpret differences at unknown offsets.
 ```
+### Hash
+```
+      --hash                Hash a binary file disregarding linker timestamp
+                            info, digital signature, version info section in
+                            resources, __FILE__, __DATE__ and __TIME__ macros when
+                            they are used as literal strings.
+                              Returns SHA256 if files generation is successfully otherwise 0.
+
+      --r arg               List of ranges to ignore when comparing:
+                            {comment1:offset1:size1,comment2:offset2:size2,...}.
+      --r1 arg              List of ranges to ignore when comparing (first binary).
+      --r2 arg              List of ranges to ignore when comparing (second
+                            binary).
+```
 ### Edit
 ```
       --delete-resource arg      Delete resource by path.

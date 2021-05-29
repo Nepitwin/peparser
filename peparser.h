@@ -127,6 +127,8 @@ namespace peparser
 		// use noHeuristics to avoid searching for __FILE__, __DATE__ and other fussily matchable differences
 		static CompareResult Compare(const PEParser& p1, const PEParser& p2, bool fast, bool noHeuristics, bool verbose, bool tlbCmpExpr);
 
+		static std::wstring Hash(const PEParser& parser);
+
 		// manually mark a range as irrelevant when comparing binaries 
 		void AddIgnoredRange(const Block& block);
 		// manually mark a list of ranges as irrelevant when comparing binaries 

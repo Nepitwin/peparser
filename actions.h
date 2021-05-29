@@ -19,6 +19,7 @@ namespace peparser
 	void DumpResource(const boost::program_options::variables_map& variables, int& retcode);
 
 	void Compare(const boost::program_options::variables_map& variables, int& retcode);
+	void Hash(const boost::program_options::variables_map& variables, int& retcode);
 
 	void DeleteResource(const boost::program_options::variables_map& variables, int& retcode);
 	void DeleteSignature(const boost::program_options::variables_map& variables, int& retcode);
