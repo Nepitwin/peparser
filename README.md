@@ -30,15 +30,25 @@ This code is made available under a permissive MIT license. Please refer to the 
 
 # Build
 
-Visual Studio 2015
+Install conan package manager and download all dependencies
 
-NuGet package manager dependencies:
-    boost
-    boost_filesystem-vc140
-    boost_program_options-vc140
-    boost_system-vc140
-    
-Open peparser.sln and build.
+## Release
+
+```
+  conan install .
+```
+
+## Debug
+
+```
+  conan install . -s build_type=Debug
+```
+
+Build all files by cmake cmd line or cmake gui
+
+```
+  cmake --build .
+```
 
 # Filing bugs
 
