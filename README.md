@@ -107,7 +107,7 @@ Works on files provided as input (can handle multiple files).
 ```
 ### Hash
 ```
-      --hash                Hash a binary file disregarding linker timestamp
+      --hash arg            Hash a binary file disregarding linker timestamp
                             info, digital signature, version info section in
                             resources, __FILE__, __DATE__ and __TIME__ macros when
                             they are used as literal strings.
