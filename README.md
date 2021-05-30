@@ -30,31 +30,36 @@ This code is made available under a permissive MIT license. Please refer to the 
 
 # Build
 
-Install conan package manager and download all dependencies
+Install microsoft [vcpkg](https://github.com/microsoft/vcpkg) and download all dependencies
 
-## Release
-
+## Dependencies
 ```
-  conan install .
-```
-
-## Debug
-
-```
-  conan install . -s build_type=Debug
+  vcpkg install boost:x86-windows-static
+  vcpkg install boost:x64-windows-static
+  vcpkg install openssl:x64-windows-static
+  vcpkg install openssl:x64-windows-static
 ```
 
-## Visual Studio Profiles
+## Profiles
 
+* Debug X64
 ```
-  conan install --profile .\profile_debug .
-  conan install --profile .\profile_release .
+cmake -Bcmake-build-debug_x64 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="<VCPKG_PATH>/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static
 ```
 
-Build all files by cmake cmd line or cmake gui
-
+* Release X64
 ```
-  cmake --build .
+cmake -Bcmake-build-release_x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="<VCPKG_PATH>/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static
+```
+
+* Debug X86
+```
+cmake -Bcmake-build-debug_x64 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="<VCPKG_PATH>/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x86-windows-static
+```
+
+* Release X86
+```
+cmake -Bcmake-build-release_x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="<VCPKG_PATH>/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x86-windows-static
 ```
 
 # Filing bugs

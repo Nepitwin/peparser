@@ -2,10 +2,14 @@ cmake_minimum_required(VERSION 3.16)
 project(peparser)
 set(CMAKE_CXX_STANDARD 14)
 
-include(conanbuildinfo.cmake)
-conan_basic_setup()
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_RUNTIME ON)
 
-add_executable(peparser 
+find_package(OpenSSL REQUIRED)
+find_package(Boost REQUIRED COMPONENTS program_options filesystem REQUIRED)
+
+add_executable(peparser
     actions.cpp actions.h
     activationcontext.cpp activationcontext.h
     block.cpp block.h
@@ -22,4 +26,5 @@ add_executable(peparser
     widestring.cpp widestring.h
     json/json.cpp json/json.h)
 
-target_link_libraries(peparser PRIVATE ${CONAN_LIBS})
+include_directories(${Boost_INCLUDE_DIRS})
+target_link_libraries(peparser PRIVATE OpenSSL::SSL OpenSSL::Crypto ${Boost_LIBRARIES})
