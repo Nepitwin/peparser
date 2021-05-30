@@ -18,7 +18,6 @@ add_executable(peparser
     etoken.cpp etoken.h
     main.cpp
     peparser.cpp peparser.h
-    resource.h
     resourcepath.cpp resourcepath.h
     resourcetable.cpp resourcetable.h
     signer.cpp signer.h
